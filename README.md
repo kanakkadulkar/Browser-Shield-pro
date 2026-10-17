@@ -1,5 +1,7 @@
 # BrowserShield-Pro 🛡️
 
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Launch%20Studio-blueviolet?style=for-the-badge&logo=google-chrome&logoColor=white)](https://kanakkadulkar.github.io/Browser-Shield-pro/)
+
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Chrome Extension](https://img.shields.io/badge/Chrome-Manifest_V3-green.svg)](https://developer.chrome.com/docs/extensions/mv3/)
 [![Tests Passing](https://img.shields.io/badge/tests-53%20passed-brightgreen.svg)](./tests)
@@ -8,7 +10,10 @@
 
 > **Real-time, on-device behavioural cryptojacking detection from browser telemetry, paired with a scientifically rigorous, leak-free evaluation protocol.**
 
+👉 **Live Interactive Demonstration:** [https://kanakkadulkar.github.io/Browser-Shield-pro/](https://kanakkadulkar.github.io/Browser-Shield-pro/)
+
 BrowserShield-Pro is an end-to-end security system designed to detect in-browser cryptocurrency mining scripts (cryptojacking) purely from client-side behavioral telemetry—without relying on brittle domain blacklists, URL heuristics, or invasive code inspections. It features an **XGBoost** classification model calibrated via **Platt scaling**, an **out-of-distribution (OOD) safeguard**, a **sub-millisecond in-browser JavaScript inference engine**, and a production-grade **Google Chrome Manifest V3 extension** ("Sheilded").
+
 
 ---
 
