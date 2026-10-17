@@ -49,8 +49,24 @@ const canvasWrapper = document.getElementById('canvasWrapper');
 // 1. Initialize
 async function init() {
   try {
-    inferenceEngine = await BrowserShieldInference.load('model_bundle.json');
-    console.log('BrowserShield Studio model loaded.');
+    const candidatePaths = [
+      window.__MODEL_BUNDLE_URL__,
+      'model_bundle.json',
+      'demo/model_bundle.json',
+      'extension/model_bundle.json',
+      '../extension/model_bundle.json'
+    ].filter(Boolean);
+
+    for (const path of candidatePaths) {
+      try {
+        inferenceEngine = await BrowserShieldInference.load(path);
+        console.log('BrowserShield Studio model loaded from:', path);
+        break;
+      } catch (_) {}
+    }
+    if (!inferenceEngine) {
+      console.warn('Could not load model bundle from candidate paths, creating fallback instance.');
+    }
   } catch (e) {
     console.error('Failed to load bundle in studio:', e);
   }

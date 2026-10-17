@@ -4,56 +4,689 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BrowserShield-Pro | Real-Time On-Device Cryptojacking Defense</title>
-  <meta name="description" content="Real-time on-device behavioral cryptojacking and in-browser miner detection using machine learning telemetry.">
-  
+  <meta name="description" content="Download the BrowserShield-Pro Chrome Extension (Manifest V3) or test the live on-device AI cryptojacking detection simulator.">
+
   <!-- OpenGraph / Social Sharing Preview -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://kanakkadulkar.github.io/Browser-Shield-pro/">
-  <meta property="og:title" content="BrowserShield-Pro | AI Cryptojacking Defense Studio">
-  <meta property="og:description" content="Interactive browser cryptojacking simulator & on-device AI detector with sub-millisecond local inference.">
+  <meta property="og:title" content="BrowserShield-Pro | On-Device AI Cryptojacking Defense">
+  <meta property="og:description" content="Download the Manifest V3 Chrome Extension and test the real-time AI miner detector with sub-millisecond local inference.">
   <meta property="og:image" content="https://kanakkadulkar.github.io/Browser-Shield-pro/extension/icons/icon128.png">
 
-  <!-- Instant redirect to interactive studio -->
-  <meta http-equiv="refresh" content="0; url=demo/index.html">
-  <script>
-    window.location.replace("demo/index.html");
-  </script>
+  <!-- Fonts & Styles -->
+  <link rel="stylesheet" href="demo/demo.css">
+  <link rel="stylesheet" href="extension/popup.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
   <style>
-    body {
-      background-color: #0b0f19;
-      color: #94a3b8;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      display: flex;
-      flex-direction: column;
+    /* Hero & Landing Additions */
+    .hero-banner {
+      padding: 48px 0 36px;
+      text-align: center;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 32px;
+      position: relative;
+    }
+    .hero-badge-pill {
+      display: inline-flex;
       align-items: center;
+      gap: 8px;
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      color: var(--accent-cyan);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 999px;
+      margin-bottom: 20px;
+      letter-spacing: 0.3px;
+    }
+    .hero-heading {
+      font-size: 44px;
+      font-weight: 900;
+      line-height: 1.15;
+      letter-spacing: -1px;
+      max-width: 860px;
+      margin: 0 auto 18px;
+      background: linear-gradient(135deg, #ffffff 20%, #cbd5e1 50%, var(--accent-blue) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-subtext {
+      font-size: 16px;
+      color: var(--text-muted);
+      max-width: 680px;
+      margin: 0 auto 28px;
+      line-height: 1.6;
+    }
+    .hero-cta-group {
+      display: flex;
       justify-content: center;
-      height: 100vh;
-      margin: 0;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 36px;
+    }
+    .btn-download-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: linear-gradient(135deg, #0284c7 0%, #2563eb 50%, #4f46e5 100%);
+      color: #ffffff;
+      font-weight: 700;
+      font-size: 15px;
+      padding: 14px 26px;
+      border-radius: 10px;
+      text-decoration: none;
+      box-shadow: 0 4px 20px rgba(37, 99, 235, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+      transition: all 0.2s ease;
+    }
+    .btn-download-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 26px rgba(37, 99, 235, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.25) inset;
+    }
+    .btn-simulator-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(56, 189, 248, 0.4);
+      color: var(--accent-cyan);
+      font-weight: 600;
+      font-size: 15px;
+      padding: 14px 22px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-simulator-secondary:hover {
+      background: rgba(56, 189, 248, 0.15);
+      border-color: var(--accent-cyan);
+      transform: translateY(-2px);
+    }
+    .btn-github-tertiary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      font-weight: 600;
+      font-size: 15px;
+      padding: 14px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-github-tertiary:hover {
+      background: rgba(255, 255, 255, 0.1);
+      border-color: rgba(255, 255, 255, 0.2);
+    }
+    .stats-ribbon {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .stat-pill {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 16px;
       text-align: center;
     }
-    .spinner {
-      width: 40px;
-      height: 40px;
-      border: 3px solid rgba(59, 130, 246, 0.2);
-      border-top-color: #3b82f6;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin-bottom: 16px;
+    .stat-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #ffffff;
+      font-family: var(--font-mono);
+      margin-bottom: 4px;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    .stat-value.highlight {
+      background: linear-gradient(135deg, #38bdf8, #818cf8);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    a {
-      color: #38bdf8;
+    .stat-desc {
+      font-size: 12px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    /* Quick Install Cards Section */
+    .install-section {
+      margin-bottom: 40px;
+    }
+    .section-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+    .install-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+    .install-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .install-card:hover {
+      border-color: var(--border-glow);
+      transform: translateY(-2px);
+    }
+    .step-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: rgba(56, 189, 248, 0.15);
+      color: var(--accent-blue);
+      border-radius: 8px;
+      font-weight: 800;
+      font-size: 13px;
+      margin-bottom: 12px;
+    }
+    .install-card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 8px;
+    }
+    .install-card-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+    .code-chip {
+      background: #000;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-cyan);
+      user-select: all;
+    }
+    .footer-bar {
+      margin-top: 60px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-subtle);
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 13px;
+    }
+    .footer-bar a {
+      color: var(--accent-blue);
       text-decoration: none;
-    }
-    a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <div class="spinner"></div>
-  <p>Loading BrowserShield-Pro Studio... If you are not redirected automatically, <a href="demo/index.html">click here</a>.</p>
+  <div class="container">
+    <!-- Navbar / Header -->
+    <header class="studio-header">
+      <div class="brand-row">
+        <img src="extension/icons/icon128.png" alt="BrowserShield Shield Logo" class="logo-shield">
+        <div>
+          <h1 class="brand-title">BrowserShield<span class="pro-chip">PRO</span></h1>
+          <p class="brand-tagline">Behavioral In-Browser Cryptojacking & Web Miner Defense</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <a href="sheilded-extension.zip" download class="btn-download-primary" style="padding: 8px 16px; font-size: 13px;">
+          <span>⬇️</span> Download Extension (.zip)
+        </a>
+        <a href="https://github.com/kanakkadulkar/Browser-Shield-pro" target="_blank" class="btn-github-tertiary" style="padding: 8px 14px; font-size: 13px;">
+          <span>⭐</span> GitHub
+        </a>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-banner">
+      <div class="hero-badge-pill">
+        <span>🛡️</span> Google Chrome Manifest V3 · On-Device Machine Learning
+      </div>
+      <h2 class="hero-heading">
+        Real-Time On-Device Cryptojacking Defense for Chrome
+      </h2>
+      <p class="hero-subtext">
+        Detect unauthorized WebAssembly hashing routines and evasive cryptojacking scripts directly from client-side behavioral telemetry. <strong>100% offline, zero latency, sub-millisecond local inference.</strong>
+      </p>
+
+      <div class="hero-cta-group">
+        <a href="sheilded-extension.zip" download class="btn-download-primary">
+          <span>⬇️</span> Download Chrome Extension (.zip)
+          <span style="font-size: 11px; opacity: 0.8; font-weight: normal;">(117 KB)</span>
+        </a>
+        <a href="#simulator" class="btn-simulator-secondary">
+          <span>⚡</span> Try In-Browser AI Simulator
+        </a>
+        <a href="https://github.com/kanakkadulkar/Browser-Shield-pro" target="_blank" class="btn-github-tertiary">
+          <span>📁</span> View Source Code
+        </a>
+      </div>
+
+      <!-- Stat Counters -->
+      <div class="stats-ribbon">
+        <div class="stat-pill">
+          <div class="stat-value highlight">&lt; 0.4 ms</div>
+          <div class="stat-desc">Sub-Millisecond On-Device Inference</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-value">0.972</div>
+          <div class="stat-desc">Test Set ROC-AUC Score</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-value">97.0%</div>
+          <div class="stat-desc">Detection Recall on Unseen Traffic</div>
+        </div>
+        <div class="stat-pill">
+          <div class="stat-value highlight">2.3%</div>
+          <div class="stat-desc">FPR (82% Reduction vs Baseline)</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3-STEP INSTALLATION GUIDE -->
+    <section class="install-section">
+      <div class="section-title">
+        <span>🚀</span> Install in Chrome in 60 Seconds
+      </div>
+      <p class="section-sub">
+        No developer setup required. Download the extension ZIP, load it directly into Google Chrome, and protect your browser immediately.
+      </p>
+
+      <div class="install-grid">
+        <div class="install-card">
+          <div class="step-badge">1</div>
+          <div class="install-card-title">Download & Unzip</div>
+          <div class="install-card-desc">
+            Download <a href="sheilded-extension.zip" download style="color:var(--accent-blue); font-weight:600;">sheilded-extension.zip</a> (117 KB) and extract it on your computer to get the <code>extension</code> folder.
+          </div>
+        </div>
+
+        <div class="install-card">
+          <div class="step-badge">2</div>
+          <div class="install-card-title">Open Extensions & Enable Dev Mode</div>
+          <div class="install-card-desc">
+            Open Chrome and navigate to <span class="code-chip">chrome://extensions</span>. Turn on the <strong>Developer mode</strong> toggle in the top-right corner.
+          </div>
+        </div>
+
+        <div class="install-card">
+          <div class="step-badge">3</div>
+          <div class="install-card-title">Load Unpacked Folder</div>
+          <div class="install-card-desc">
+            Click <strong>"Load unpacked"</strong> in the top-left and select the extracted <code>extension</code> folder. BrowserShield-Pro is now active in your toolbar!
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- NAVIGATION TABS FOR SIMULATOR & RESEARCH -->
+    <div id="simulator"></div>
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="tabSimulator">🧪 Live Attack Simulator & Detector</button>
+      <button class="nav-tab" data-tab="tabBenchmarks">📊 Research Benchmarks & Honest Protocol</button>
+      <button class="nav-tab" data-tab="tabFeatures">🔬 15 Behavioral Features & SHAP</button>
+      <button class="nav-tab" data-tab="tabExtension">🛡️ Chrome Extension Architecture</button>
+    </nav>
+
+    <!-- TAB 1: Live Simulator & Detector -->
+    <main id="tabSimulator" class="tab-pane active">
+      <div class="studio-grid">
+        <!-- Workload Controls -->
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">🧪 Workload Generator</h2>
+            <span class="card-subtitle" id="countdownSpan"></span>
+          </div>
+
+          <div class="workload-options">
+            <button class="workload-btn active" data-workload="miner_wasm">
+              <span class="btn-badge badge-attack">ATTACK</span>
+              <span>WebAssembly / JS Miner</span>
+              <small style="color:var(--text-dim)">Tight hashing compute loop</small>
+            </button>
+            <button class="workload-btn" data-workload="stealth_miner">
+              <span class="btn-badge badge-attack">ATTACK</span>
+              <span>Stealth POST Miner</span>
+              <small style="color:var(--text-dim)">Throttled compute + POST chatter</small>
+            </button>
+            <button class="workload-btn" data-workload="video">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>60 FPS Video Streamer</span>
+              <small style="color:var(--text-dim)">Legitimate heavy canvas render</small>
+            </button>
+            <button class="workload-btn" data-workload="webgl">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>WebGL Shader Demo</span>
+              <small style="color:var(--text-dim)">GPU/CPU mathematical animation</small>
+            </button>
+            <button class="workload-btn" data-workload="dom_churn">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>Heavy DOM Churn</span>
+              <small style="color:var(--text-dim)">Dynamic single-page app mutations</small>
+            </button>
+            <button class="workload-btn" data-workload="idle">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>Normal Idle Browsing</span>
+              <small style="color:var(--text-dim)">Baseline user reading session</small>
+            </button>
+          </div>
+
+          <!-- Dynamic Sliders -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Compute Duty-Cycle Intensity:</span>
+              <span class="slider-val" id="intensityVal">50%</span>
+            </div>
+            <input type="range" id="intensitySlider" min="10" max="100" value="50" step="5">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Concurrent Web Workers:</span>
+              <span class="slider-val" id="workerVal">2</span>
+            </div>
+            <input type="range" id="workerSlider" min="1" max="4" value="2" step="1">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Simulated Mining Pool POST Rate:</span>
+              <span class="slider-val" id="postVal">4 req/s</span>
+            </div>
+            <input type="range" id="postSlider" min="0" max="15" value="4" step="1">
+          </div>
+
+          <!-- Canvas Preview for Benign Workloads -->
+          <div class="workload-canvas-wrapper" id="canvasWrapper">
+            <canvas id="benignCanvas" width="480" height="80"></canvas>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-row">
+            <button class="btn-start" id="btnStart">
+              <span>▶</span> Start Simulated Workload
+            </button>
+            <button class="btn-stop" id="btnStop" style="display: none;">
+              <span>⏹</span> Stop Workload
+            </button>
+          </div>
+          <p class="safety-note">⚠️ Safety Protected: Runs locally in this tab only, mines zero cryptocurrency, and automatically cuts off after 30 seconds.</p>
+        </div>
+
+        <!-- Live Detection HUD -->
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">🛡️ Live Real-Time Verdict HUD</h2>
+            <span class="latency-badge" id="hudLatency">⚡ &lt; 0.4 ms</span>
+          </div>
+
+          <div class="hud-verdict">
+            <!-- Verdict Hero -->
+            <div class="verdict-hero safe" id="verdictHero">
+              <div class="hero-left">
+                <div class="hero-icon" id="heroIcon">🛡️</div>
+                <div>
+                  <div class="hero-title" id="heroTitle">NORMAL BENIGN BROWSING</div>
+                  <div class="hero-sub" id="heroSub">No cryptojacking signatures detected</div>
+                </div>
+              </div>
+              <div class="hero-right">
+                <div class="hero-prob" id="heroProb">0.0%</div>
+                <div class="hero-prob-label">Risk Probability</div>
+              </div>
+            </div>
+
+            <!-- Spark Metrics Grid -->
+            <div class="spark-grid">
+              <div class="spark-card">
+                <div class="spark-label">Event-Loop Lag</div>
+                <div class="spark-val" id="hudLag">0 ms</div>
+              </div>
+              <div class="spark-card">
+                <div class="spark-label">DOM Mutations</div>
+                <div class="spark-val" id="hudDom">0</div>
+              </div>
+              <div class="spark-card">
+                <div class="spark-label">Outgoing POSTs</div>
+                <div class="spark-val" id="hudPost">0</div>
+              </div>
+            </div>
+
+            <!-- Explainable AI Threat Reasons -->
+            <div class="reasons-container">
+              <div class="reasons-header">AI Risk Attribution & Heuristics</div>
+              <div id="hudReasons">
+                <div class="reason-pill none">
+                  <span class="reason-icon">✓</span>
+                  <div>
+                    <strong>Normal Browsing Behavior</strong>
+                    <div>CPU lag, network volume, and DOM interaction rates are consistent with benign web pages.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 2: Research Benchmarks -->
+    <div id="tabBenchmarks" class="tab-pane">
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">📊 Locked Test-Set Evaluation vs Previous SOTA Baseline</h2>
+          <span class="badge badge-speed">Single-Access Evaluation</span>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
+          Tested on 928 unseen normal browsing snapshots from held-out user groups under a pre-registered protocol. Prior literature reported inflated ~99% metrics by evaluating on random row splits of synthetic generator duplicates. BrowserShield-Pro enforces strict user-group holdouts and Platt calibration.
+        </p>
+
+        <div class="table-wrapper">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Evaluation Metric</th>
+                <th>Previous Recipe (Baseline)</th>
+                <th>BrowserShield-Pro (Ours)</th>
+                <th>Delta / Gain</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>ROC-AUC</strong></td>
+                <td>0.955</td>
+                <td style="color: #38bdf8; font-weight: 700;">0.972</td>
+                <td style="color: #34d399;">+0.017 ranking separation</td>
+              </tr>
+              <tr>
+                <td><strong>PR-AUC (8.35% natural prevalence)</strong></td>
+                <td>0.724</td>
+                <td style="color: #38bdf8; font-weight: 700;">0.817</td>
+                <td style="color: #34d399;">+0.093 precision-recall boost</td>
+              </tr>
+              <tr>
+                <td><strong>False Positive Rate (FPR)</strong></td>
+                <td>13.0% (own rule) / 5.5%</td>
+                <td style="color: #34d399; font-weight: 700;">2.3% (pooled) / 0.4%</td>
+                <td style="color: #34d399;">&gt;82% false alarm reduction</td>
+              </tr>
+              <tr>
+                <td><strong>Recall ("Dangerous" alone)</strong></td>
+                <td>81.0%</td>
+                <td>73.7%</td>
+                <td>Controlled trade-off for zero false alarms</td>
+              </tr>
+              <tr>
+                <td><strong>Recall ("Dangerous" + "Suspicious")</strong></td>
+                <td>95.7%</td>
+                <td style="color: #34d399; font-weight: 700;">97.0%</td>
+                <td style="color: #34d399;">Catches 97% of stealthy miners</td>
+              </tr>
+              <tr>
+                <td><strong>Inference Engine Runtime</strong></td>
+                <td>Server / Remote API Required</td>
+                <td style="color: #38bdf8; font-weight: 700;">&lt; 0.4 ms (In-Browser JS)</td>
+                <td style="color: #34d399;">100% Offline, Zero Telemetry Leak</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Features & SHAP -->
+    <div id="tabFeatures" class="tab-pane">
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">🔬 15 BSP Telemetry Features & Engineering</h2>
+          <span class="badge badge-privacy">Privacy-Preserving</span>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 16px; line-height: 1.6;">
+          Our feature extractor transforms raw tab metrics into non-identifiable rate and ratio signals, eliminating synthetic shortcut leakage while preserving high signal-to-noise detection power.
+        </p>
+
+        <div class="table-wrapper">
+          <table class="benchmark-table">
+            <thead>
+              <tr>
+                <th>Index</th>
+                <th>Feature Name</th>
+                <th>Formula / Derivation</th>
+                <th>Physical Attack Indicator</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>0</code></td>
+                <td><code>counts_only</code></td>
+                <td><code>hasUptime ? 0.0 : 1.0</code></td>
+                <td>Cadence anomaly & regime indicator</td>
+              </tr>
+              <tr>
+                <td><code>1</code></td>
+                <td><code>log_uptime_s</code></td>
+                <td><code>log(1 + uptime / 1000)</code></td>
+                <td>Tab execution duration scale</td>
+              </tr>
+              <tr>
+                <td><code>2</code></td>
+                <td><code>lag_fraction</code></td>
+                <td><code>min(max(lag / uptime, 0), 1)</code></td>
+                <td>Main-thread event loop compute saturation</td>
+              </tr>
+              <tr>
+                <td><code>3</code></td>
+                <td><code>log_dom_rate</code></td>
+                <td><code>log(1 + dom_mutations / uptime_s)</code></td>
+                <td>Silent execution vs active rendering</td>
+              </tr>
+              <tr>
+                <td><code>4</code></td>
+                <td><code>log_net_rate</code></td>
+                <td><code>log(1 + total_requests / uptime_s)</code></td>
+                <td>Overall network request density</td>
+              </tr>
+              <tr>
+                <td><code>5</code></td>
+                <td><code>log_post_rate</code></td>
+                <td><code>log(1 + post_requests / uptime_s)</code></td>
+                <td>Mining share submission frequency</td>
+              </tr>
+              <tr>
+                <td><code>6</code></td>
+                <td><code>post_share</code></td>
+                <td><code>post_requests / max(net_requests, 1)</code></td>
+                <td>Share of POST vs standard GET traffic</td>
+              </tr>
+              <tr>
+                <td><code>10</code></td>
+                <td><code>log_lag_ms</code></td>
+                <td><code>log(1 + event_loop_lag_ms)</code></td>
+                <td>Cumulative main thread blockage</td>
+              </tr>
+              <tr>
+                <td><code>13</code></td>
+                <td><code>visibility_hidden</code></td>
+                <td><code>tab.hidden ? 1.0 : 0.0</code></td>
+                <td>Hidden background tab compute evasion</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Chrome Extension Architecture -->
+    <div id="tabExtension" class="tab-pane">
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">🛡️ Chrome Extension Architecture & Data Flow</h2>
+          <span class="badge badge-privacy">Manifest V3 Compliant</span>
+        </div>
+        <p style="color: var(--text-muted); margin-bottom: 20px; line-height: 1.6;">
+          BrowserShield-Pro ("Sheilded") operates entirely within Google Chrome without external backends or cloud API dependencies.
+        </p>
+
+        <div class="install-grid">
+          <div class="install-card">
+            <div class="install-card-title">1. Main-World Page Hook</div>
+            <div class="install-card-desc">
+              Runs in the webpage's main execution context to passively monitor <code>fetch</code>, <code>XMLHttpRequest</code>, and <code>sendBeacon</code> calls without interfering with page scripts.
+            </div>
+          </div>
+          <div class="install-card">
+            <div class="install-card-title">2. Isolated Content Script</div>
+            <div class="install-card-desc">
+              Samples event-loop ticks via <code>requestAnimationFrame</code>, observes DOM churn via <code>MutationObserver</code>, and records visibility changes.
+            </div>
+          </div>
+          <div class="install-card">
+            <div class="install-card-title">3. Sub-ms JS Inference Engine</div>
+            <div class="install-card-desc">
+              Evaluates serialized XGBoost decision trees and Platt logistic calibration in pure JavaScript in &lt; 0.4 ms, generating real-time risk scores and threat attribution.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer-bar">
+      <p>
+        <strong>BrowserShield-Pro</strong> · Built by <a href="https://github.com/kanakkadulkar" target="_blank">Kanak Kadulkar</a> · Open-Source under the <a href="LICENSE" target="_blank">MIT License</a>
+      </p>
+      <p style="margin-top: 6px;">
+        <a href="sheilded-extension.zip" download>Download Extension (.zip)</a> · 
+        <a href="https://github.com/kanakkadulkar/Browser-Shield-pro" target="_blank">GitHub Repository</a> · 
+        <a href="docs/FINAL_RESULTS.md" target="_blank">Research Evaluation Paper</a>
+      </p>
+    </footer>
+  </div>
+
+  <!-- Scripts -->
+  <script src="extension/inference.js"></script>
+  <script src="demo/demo.js"></script>
 </body>
 </html>
