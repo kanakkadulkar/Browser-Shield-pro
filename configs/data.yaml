@@ -1,0 +1,35 @@
+# Data configuration. Seeds live here, never hard-coded in src/.
+seed: 42
+
+# Friend's project folder: READ-ONLY reference. Only src/deidentify.py reads it.
+source_dir: "../BE Project - BrowserShield"
+source_files:
+  raw: telemetry_features.csv            # raw collected telemetry (has user/domain/timestamp)
+  normal_a: telemetry_ml_final1.csv      # Reading A: 10,973 normal rows (chosen)
+  normal_b: telemetry_ml_final.csv       # Reading B: 3,098 normal rows (literal "final")
+  synthetic: synthetic_anomalies.csv     # friend's 1,000 synthetic "attack" rows
+  merged: telemetry_ml_final_full.csv    # = synthetic + normal_a, unlabelled (used for verification only)
+
+# De-identified inputs (everything downstream reads only these).
+deid_dir: data/raw
+salt_path: .secrets/salt                 # local random salt, git-ignored
+processed_dir: data/processed
+
+features:
+  - idle_ratio
+  - lag_per_second
+  - dom_per_second
+  - network_per_second
+  - event_loop_lag_ms
+  - dom_mutation_count
+  - network_request_count
+  - post_request_count
+  - unique_domains_contacted
+  - visibility_hidden
+  - visibility_changes
+
+# Columns dropped during de-identification (identifiers, or machine fingerprints).
+dropped_columns: [user_id, domain, timestamp, cpu_cores, memory_available]
+
+# Which dataset is "final" (see docs/DATA_LINEAGE.md for the evidence).
+primary_reading: A

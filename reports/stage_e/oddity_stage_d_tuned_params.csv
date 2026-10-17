@@ -1,0 +1,10 @@
+fold,seed,imbalance,n_estimators,max_depth,lr,min_child_weight
+0f14de,42,class_weight,256,8,0.145,1.6
+0f14de,43,class_weight,187,7,0.15,4.93
+0f14de,44,focal,350,7,0.024,1.04
+2c0470,42,class_weight,256,8,0.145,1.6
+2c0470,43,class_weight,187,7,0.15,4.93
+2c0470,44,focal,350,7,0.024,1.04
+unknow,42,class_weight,159,2,0.182,10.08
+unknow,43,class_weight,441,5,0.173,2.76
+unknow,44,class_weight,105,4,0.024,1.96

@@ -1,0 +1,84 @@
+# Stage D: own features + M1 (gradient boosting), M2 (feature-token attention net), M4 (one-class)
+# vs his recipe and trivial baselines. FROZEN before any Stage D result was produced.
+# Do not edit after seeing results (docs/STAGE_D_REPORT.md records this).
+# Dev folds only: the locked test set is never loaded.
+seeds: [42, 43, 44]
+readings: [A, B]
+primary_reading: A
+
+generator:
+  primary_version: 2                  # v2 = fixes ONLY the counts-only uptime fallback (configs/synth_v2.yaml)
+  compared_versions: [1, 2]
+  heldout_family: throttled           # never generated for training, validation, tuning or early stopping
+  train_families: [main_thread, worker_pool, network_only]
+  # his recipe and every other model are retrained WITHOUT the held-out family, so all share training data.
+
+# Training sources (what the attacks in the training set come from)
+#   H  = his tiered generator   R1 = rebuilt v1   R2 = rebuilt v2
+sources: [H, R1, R2]
+# Evaluation sets (held-out group's real normals + attacks)
+#   EH   his generator          ER1 / ER2  seen families, v1 / v2       EHO  held-out family only
+eval_sets: [EH, ER1, ER2, EHO]
+
+# Own feature set "bsp_v1" (src/features2.py): counts-only indicator, recovered log-uptime, lag fraction,
+# correct per-second rates (0 when uptime is unknown), log-scaled counters, post share, idle/visibility.
+features: bsp_v1
+
+honest:                               # same protocol as Stage C
+  eval_attack_ratio: 0.25
+  train_attack_ratio: 0.0911
+  prevalence: 0.0835
+  inner_val_random_frac: 0.2
+  min_fold_rows: 50
+  tune_random_holdout_frac: 0.2       # second tuning split: random fraction of the training side
+
+his: {config: stage_c.yaml}           # his-recipe settings are read from configs/stage_c.yaml (frozen there)
+
+m1:                                   # XGBoost, Optuna-tuned per (fold, source, seed) on the training side only
+  trials: 20
+  max_estimators: 600
+  early_stopping_rounds: 40
+  space:
+    n_estimators: [50, 600]
+    max_depth: [2, 8]
+    learning_rate: [0.02, 0.3]        # log
+    subsample: [0.5, 1.0]
+    colsample_bytree: [0.5, 1.0]
+    min_child_weight: [1, 20]         # log
+    reg_lambda: [0.01, 20.0]          # log
+    imbalance: [class_weight, focal]  # exactly ONE mechanism is used, chosen by the tuning objective
+    focal_gamma: [0.5, 3.0]
+    focal_alpha: [0.5, 0.95]
+  objective: mean_pr_auc_on_two_validation_splits   # (a) group-held-out validation, (b) random 20% of training side
+
+m2:                                   # FT-Transformer style: one token per feature + [CLS]
+  d_token: 32
+  n_layers: 2
+  n_heads: 4
+  ffn: 64
+  dropout: 0.1
+  lr: 0.001
+  weight_decay: 0.0001
+  batch_size: 128
+  max_epochs: 80
+  warmup_epochs: 3                    # then cosine decay to 1% of lr
+  es_patience: 12                     # early stopping on validation loss (the chosen mechanism's loss)
+  # imbalance mechanism (and focal gamma/alpha) = the one M1's tuning chose for the same fold/source/seed
+
+m4:                                   # one-class: trained on normals only; evidence about inflation, not detection
+  iforest: {n_estimators: 300}
+  ae: {hidden: [32, 16, 8], lr: 0.001, batch_size: 128, max_epochs: 100, es_patience: 10}
+
+metrics:
+  fpr_targets: [0.01, 0.001]
+  recall_target: 0.95
+  ece_bins: 10
+  bootstrap_reps: 200
+  bootstrap_seed: 12345
+  ci: 0.95
+
+sweep:                                # SIMULATED miner signal, ASSUMED effect sizes
+  strengths: [-2.0, -1.5, -1.0, -0.5, 0.0, 0.25, 0.5, 0.75, 1.0, 1.5]
+  families: [main_thread, worker_pool, network_only, throttled]   # throttled = held-out
+  n_per_cell: 300
+  works_threshold: 0.5

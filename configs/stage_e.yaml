@@ -1,0 +1,88 @@
+# Stage E: fair M2, counts-only regime handling, calibration, stacked ensemble, threshold policy.
+# FROZEN before any Stage E result was produced, INCLUDING every selection rule below.
+# Dev folds only. The locked test set is not loaded in this stage.
+# Everything not listed here is inherited unchanged from configs/stage_d.yaml (protocol, held-out
+# family, generator v2, seeds, sweep, metrics). Source for all Stage E models: R2 (generator v2,
+# held-out family `throttled` excluded). Attacks are SIMULATED MINER SIGNAL, assumed effect sizes.
+inherits: stage_d.yaml
+seeds: [42, 43, 44]
+readings: [A, B]
+primary_reading: A
+
+# ---------------------------------------------------------------- 1. fair M2
+m2_tuned:
+  trials: 20                        # same as M1
+  objective: mean_pr_auc_on_two_validation_splits   # same as M1: (a) group-held-out validation, (b) random 20% of training side
+  space:                            # M2 gets its OWN imbalance choice (class_weight | focal)
+    d_token: [16, 32, 64]
+    n_layers: [1, 2, 3]
+    n_heads: [2, 4]
+    ffn: [32, 64, 128]
+    dropout: [0.0, 0.3]
+    lr: [0.0001, 0.003]             # log
+    weight_decay: [0.000001, 0.01]  # log
+    batch_size: [64, 128, 256]
+    epochs: [10, 60]                # fixed-epoch training inside tuning (no early stopping, like fixed n_estimators for M1)
+    imbalance: [class_weight, focal]
+    focal_gamma: [0.5, 3.0]
+    focal_alpha: [0.5, 0.95]
+  final_fit: {max_epochs: 80, warmup_epochs: 3, es_patience: 12}   # early stopping on validation, as in Stage D
+
+# ---------------------------------------------------------------- 2. counts-only regime
+regime:
+  variants: [V0, Va, Vb, Vab]
+  # V0  no special handling (Stage D behaviour)
+  # Va  regime-specific threshold: separate validation-FPR threshold for counts-only rows
+  # Vb  separate model for counts-only rows (replaces the base score on those rows); one global threshold
+  # Vab Vb + regime-specific thresholds
+  counts_only_model:
+    type: logistic_regression         # standardised, class_weight=balanced, C=1.0
+    features: [log_net, log_post, post_share, log_unique, visibility_hidden, log_vis_changes]
+    min_train_normals: 20             # fit on TRAINING fold counts-only rows only; below these -> no separate model (variant falls back to V0 on that fold)
+    min_train_attacks: 5
+  regime_threshold_min_val_normals: 10   # below this many validation counts-only normals -> use the global threshold
+  calibrator_min_val_attacks: 5          # counts-only model: Platt only if >= this many validation attacks, else raw score
+  selection_rule:                    # applied per base (M1, M2, ensemble) on Reading A, R2 -> ER2 (seen families), FPR target 1%
+    eligible_if:
+      recall_not_lower_than_V0_by_more_than: 0.05
+      other_normals_fpr_not_higher_than_V0_by_more_than: 0.005
+    choose: lowest_counts_only_fpr_among_eligible
+    require_improvement_over_V0_of_at_least: 0.02   # absolute counts-only FPR; otherwise keep V0
+    tie_break_order: [V0, Va, Vb, Vab]               # simplest first
+
+# ---------------------------------------------------------------- 3. calibration and ensemble
+calibration:
+  methods: [platt, isotonic]          # fit on the fold's VALIDATION set only
+  platt: {c: 1000000.0}               # effectively unregularised logistic on logit(score)
+  selection_rule: lowest_mean_member_ece_on_reading_A_R2_ER2   # tie -> platt
+ensemble:
+  members: [m1, m2]                   # calibrated members; counts-only handling is applied by the regime variant selected above
+  stacker: {type: logistic_regression_on_member_logits, c: 1.0, fit_on: validation}
+  beats_best_member_rule: >-
+    ensemble is the final model only if its pooled PR-AUC (Reading A, R2->ER2) exceeds the best single
+    member's by MORE THAN that member's per-group spread (max minus min of its per-group PR-AUC);
+    otherwise the final model is the best single member by pooled PR-AUC. Reported either way.
+
+# ---------------------------------------------------------------- 4. threshold policy
+threshold_policy:
+  danger_validation_fpr_levels: [0.01, 0.005, 0.0025]   # validation-quantile levels considered for "dangerous"
+  suspicious_validation_fpr: 0.05                       # scores above this (but below danger) = "suspicious"
+  selection_rule: >-
+    choose the LARGEST level (most sensitive) whose pooled realised FPR on held-out dev groups
+    (Reading A, R2->ER2, all seeds) is <= 0.01 AND whose worst single-group realised FPR is <= 0.02;
+    if none qualifies choose the smallest level.
+  unsure:                             # no verdict for out-of-range inputs
+    rule: any bsp_v1 feature outside [min - delta*range, max + delta*range] of the TRAINING data (normals + attacks)
+    delta: 0.10
+
+# ---------------------------------------------------------------- 5. oddity diagnostic
+oddity:
+  readings: [A]
+  fits: [tuned_as_in_stage_d, default_class_weight, default_focal]
+  default_params: {n_estimators: 300, max_depth: 4, learning_rate: 0.1, subsample: 0.9, colsample_bytree: 0.9,
+                   min_child_weight: 1.0, reg_lambda: 1.0, focal_gamma: 2.0, focal_alpha: 0.75}
+
+# ---------------------------------------------------------------- 6. freeze
+freeze:
+  output: configs/stage_e_final.yaml
+  lock: configs/stage_e_final.lock

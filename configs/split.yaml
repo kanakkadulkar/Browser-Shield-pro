@@ -1,0 +1,22 @@
+# Evaluation protocol. LOCKED before any model is trained.
+seed: 42
+dedupe_before_split: true
+
+# Group rule. Rows whose feature vector appears under exactly one user get that
+# user as group. Everything else (no provenance, or vector seen under >1 user,
+# incl. the all-zero idle vector) is one "unknown_source" group that is never
+# split across train and test.
+unknown_group: unknown_source
+
+# Test hold-out: whole user groups, chosen by RANK of unique-row count in
+# Reading A (1 = largest). Chosen from group sizes only, before any modelling.
+# The same test groups are used under every reading, so results are comparable.
+test_user_ranks: [2, 4]
+
+# Groups with fewer unique rows than this are never used as a validation fold
+# (they are always in the training side of dev folds).
+min_fold_rows: 50
+
+# Pseudo-groups for attack rows that have no base row (friend's CSV).
+synthetic_batches: 20
+synthetic_test_batches: 4

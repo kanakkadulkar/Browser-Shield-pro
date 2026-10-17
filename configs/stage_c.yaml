@@ -1,0 +1,53 @@
+# Stage C: reproduction of the DESCRIBED method of the original project, measured under
+# his protocol and under the honest protocol. FROZEN before any Stage C result was
+# produced. Do not edit after seeing results (docs/STAGE_C_REPORT.md records this).
+seeds: [42, 43, 44]            # NN / generator / split seeds (deterministic baselines use the first)
+reading_primary: A
+readings: [A, B]
+
+# --- his recipe (values copied from CryptoShield_Final.ipynb cells 28-38) ---
+his:
+  l2: 0.001
+  dropout: [0.5, 0.5, 0.4]
+  lr: 0.0003
+  batch_size: 64
+  max_epochs: 150
+  es_patience: 20
+  rlrop_factor: 0.5
+  rlrop_patience: 8
+  rlrop_min_lr: 0.000001
+  rlrop_min_delta: 0.0001
+  focal: {gamma: 2.0, alpha: 0.85, fn_weight: 3.0}   # the code's values (markdown says 5.0)
+  xgb: {n_estimators: 300, learning_rate: 0.05, max_depth: 5, subsample: 0.8, colsample_bytree: 0.8}
+  blend: {dl: 0.5, xgb: 0.5}
+  recall_min: 0.97                                    # threshold rule: max F1 s.t. recall >= 0.97 on validation
+  attack_fraction: 0.0911                             # 1000 / 10973, his attack:normal ratio
+  tier_split: [0.4, 0.4, 0.2]
+  normal_noise: 0.08
+  attack_noise: 0.15
+  split: {val: 0.15, test: 0.15}                      # 70/15/15 stratified random (his protocol only)
+  feature_modes: [coded11, described18]               # 11 = what his saved model takes; 18 = what his docs claim
+
+# --- honest protocol (dev folds only; locked test set is NOT loaded) ---
+honest:
+  eval_attack_ratio: 0.25        # attacks per normal in an evaluation fold (reweighted to prevalence below)
+  prevalence: 0.0835             # his 1000 / 11973; used to weight attacks in precision, F1, PR-AUC
+  inner_val_random_frac: 0.2     # only when < 2 groups with >= min_fold_rows remain on the training side
+  min_fold_rows: 50
+
+# --- metrics ---
+metrics:
+  fpr_target: 0.01               # "recall at fixed FPR": threshold = 99th pct of validation normals
+  recall_target: 0.95            # "FPR at fixed recall": threshold = 5th pct of validation attacks
+  bootstrap_reps: 400
+  bootstrap_seed: 12345
+  ci: 0.95
+
+# --- effect-size sweep: SIMULATED miner signal, ASSUMED effect sizes ---
+# s is the generator's strength axis; the standard generator uses s in [0,1]. Negative s
+# extrapolates the same geometric ranges below their weakest end ("low-and-slow").
+sweep:
+  strengths: [-2.0, -1.5, -1.0, -0.5, 0.0, 0.25, 0.5, 0.75, 1.0, 1.5]
+  families: [main_thread, worker_pool, throttled, network_only]
+  n_per_cell: 300
+  works_threshold: 0.5           # "stops working" = recall at 1% FPR drops below this

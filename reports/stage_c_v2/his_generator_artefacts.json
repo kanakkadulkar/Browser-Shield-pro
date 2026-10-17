@@ -1,0 +1,60 @@
+{
+ "A": {
+  "auc_all": 0.9998058166022217,
+  "auc_non_signal_only": 0.9979100683557881,
+  "best_single": [
+   "visibility_hidden",
+   0.9980223247709104
+  ],
+  "structure": {
+   "rows": 2082,
+   "regime_share": {
+    "U": 0.9841,
+    "other": 0.0159
+   },
+   "rates_share_one_uptime": 0.0016,
+   "rows_with_any_feature_above_real_max": 0.938,
+   "rows_with_any_feature_above_real_p99.9": 0.938
+  },
+  "real_structure": {
+   "rows": 8327,
+   "regime_share": {
+    "U": 0.9725,
+    "U0": 0.0267,
+    "zero": 0.0008
+   },
+   "rates_share_one_uptime": 1.0,
+   "rows_with_any_feature_above_real_max": 0.0,
+   "rows_with_any_feature_above_real_p99.9": 0.0085
+  }
+ },
+ "B": {
+  "auc_all": 0.9874709976798144,
+  "auc_non_signal_only": 0.9968959862830082,
+  "best_single": [
+   "visibility_hidden",
+   0.9954127004647175
+  ],
+  "structure": {
+   "rows": 431,
+   "regime_share": {
+    "U": 0.9884,
+    "other": 0.0116
+   },
+   "rates_share_one_uptime": 0.0026,
+   "rows_with_any_feature_above_real_max": 0.9211,
+   "rows_with_any_feature_above_real_p99.9": 0.9211
+  },
+  "real_structure": {
+   "rows": 1725,
+   "regime_share": {
+    "U": 0.9281,
+    "U0": 0.0707,
+    "zero": 0.0012
+   },
+   "rates_share_one_uptime": 1.0,
+   "rows_with_any_feature_above_real_max": 0.0,
+   "rows_with_any_feature_above_real_p99.9": 0.011
+  }
+ }
+}

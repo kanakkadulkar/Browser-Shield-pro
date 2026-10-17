@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sheilded</title>
+  <link rel="stylesheet" href="popup.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="app-header">
+      <div class="brand">
+        <div class="logo-wrapper">
+          <img src="icons/icon48.png" alt="Sheilded Logo" class="logo-img">
+          <div class="pulse-ring"></div>
+        </div>
+        <div class="brand-text">
+          <h1 class="brand-title">Sheilded</h1>
+          <p class="brand-subtitle">AI Behavioral Cryptojacking Defense</p>
+        </div>
+      </div>
+      <div class="header-status">
+        <span class="pill pill-offline" id="privacyBadge">100% On-Device</span>
+      </div>
+    </header>
+
+    <!-- Active Tab Banner -->
+    <div class="target-tab-card">
+      <div class="target-icon">🌐</div>
+      <div class="target-info">
+        <div class="target-domain" id="tabDomain">Detecting active tab...</div>
+        <div class="target-title" id="tabTitle">Ready to inspect runtime telemetry</div>
+      </div>
+    </div>
+
+    <!-- Main Shield Radar & Verdict Display -->
+    <div class="verdict-section">
+      <div class="verdict-card" id="verdictCard">
+        <div class="verdict-header">
+          <span class="verdict-label">BEHAVIORAL VERDICT</span>
+          <span class="latency-badge" id="latencyBadge">⚡ &lt; 0.5 ms</span>
+        </div>
+
+        <div class="verdict-body">
+          <div class="verdict-badge status-safe" id="verdictBadge">
+            <span class="verdict-icon" id="verdictIcon">🛡️</span>
+            <span class="verdict-text" id="verdictText">TAB PROTECTED</span>
+          </div>
+          
+          <div class="risk-meter-container">
+            <div class="risk-meter-labels">
+              <span>Risk Probability</span>
+              <span class="risk-value" id="riskPercent">0.0%</span>
+            </div>
+            <div class="risk-track">
+              <div class="risk-fill" id="riskFill" style="width: 0%;"></div>
+              <!-- Policy Threshold Markers -->
+              <div class="threshold-marker t-suspicious" title="Suspicious Threshold" style="left: 1.7%;"></div>
+              <div class="threshold-marker t-dangerous" title="Dangerous Threshold" style="left: 66%;"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Explainability Section (SHAP Breakdown) -->
+    <section class="section reasons-section">
+      <div class="section-title-row">
+        <h2 class="section-heading">AI Risk Attribution</h2>
+        <span class="sub-label">Top Behavioral Factors</span>
+      </div>
+      <div class="reasons-list" id="reasonsList">
+        <div class="reason-card loading-card">
+          <div class="reason-spinner"></div>
+          <span>Analyzing runtime event loop and network telemetry...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Live Telemetry Inspector Grid -->
+    <section class="section telemetry-section">
+      <div class="section-title-row">
+        <h2 class="section-heading">Telemetry Inspector</h2>
+        <span class="sub-label">Per-Tab Counters</span>
+      </div>
+      <div class="telemetry-grid">
+        <div class="telemetry-tile">
+          <div class="tile-icon">⏱️</div>
+          <div class="tile-content">
+            <div class="tile-value" id="telLag">0 ms</div>
+            <div class="tile-label">Event-Loop Lag</div>
+          </div>
+        </div>
+        <div class="telemetry-tile">
+          <div class="tile-icon">⚡</div>
+          <div class="tile-content">
+            <div class="tile-value" id="telDom">0</div>
+            <div class="tile-label">DOM Mutations</div>
+          </div>
+        </div>
+        <div class="telemetry-tile">
+          <div class="tile-icon">📡</div>
+          <div class="tile-content">
+            <div class="tile-value" id="telPost">0 / 0</div>
+            <div class="tile-label">POST / Requests</div>
+          </div>
+        </div>
+        <div class="telemetry-tile">
+          <div class="tile-icon">👁️</div>
+          <div class="tile-content">
+            <div class="tile-value" id="telVis">Visible</div>
+            <div class="tile-label">Tab State</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Actions -->
+    <footer class="app-footer">
+      <button class="btn btn-primary" id="btnScan">
+        <span class="btn-icon">🔍</span>
+        <span class="btn-text">Scan Current Tab</span>
+      </button>
+      <button class="btn btn-secondary" id="btnOpenDemo" title="Open Interactive Cryptojacking Simulator & Benchmark Lab">
+        <span class="btn-icon">🧪</span>
+        <span>Open Lab Studio</span>
+      </button>
+    </footer>
+  </div>
+
+  <script src="inference.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

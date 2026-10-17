@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sheilded | Live Cryptojacking Defense Studio</title>
+  <link rel="stylesheet" href="demo.css">
+  <link rel="stylesheet" href="popup.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="container">
+    <!-- Studio Header -->
+    <header class="studio-header">
+      <div class="brand-row">
+        <img src="icons/icon128.png" alt="Sheilded Logo" class="logo-shield">
+        <div>
+          <h1 class="brand-title">Sheilded Studio</h1>
+          <p class="brand-tagline">Behavioral Cryptojacking Detection from In-Browser Machine Learning Telemetry</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-privacy">🔒 100% Private On-Device</span>
+        <span class="badge badge-speed">⚡ Sub-Millisecond AI</span>
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="tabSimulator">🚀 Live Attack Simulator & Detector</button>
+      <button class="nav-tab" data-tab="tabBenchmarks">📊 Research Benchmarks & Honest Protocol</button>
+      <button class="nav-tab" data-tab="tabFeatures">🔬 Feature Engineering & SHAP</button>
+      <button class="nav-tab" data-tab="tabExtension">🛡️ Chrome Extension Setup</button>
+    </nav>
+
+    <!-- TAB 1: Live Simulator & Detector -->
+    <main id="tabSimulator" class="tab-pane active">
+      <div class="studio-grid">
+        <!-- Workload Controls -->
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">🧪 Workload Generator</h2>
+            <span class="card-subtitle" id="countdownSpan"></span>
+          </div>
+
+          <div class="workload-options">
+            <button class="workload-btn active" data-workload="miner_wasm">
+              <span class="btn-badge badge-attack">ATTACK</span>
+              <span>WebAssembly / JS Miner</span>
+              <small style="color:var(--text-dim)">Tight hashing compute loop</small>
+            </button>
+            <button class="workload-btn" data-workload="stealth_miner">
+              <span class="btn-badge badge-attack">ATTACK</span>
+              <span>Stealth POST Miner</span>
+              <small style="color:var(--text-dim)">Throttled compute + POST chatter</small>
+            </button>
+            <button class="workload-btn" data-workload="video">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>60 FPS Video Streamer</span>
+              <small style="color:var(--text-dim)">Legitimate heavy canvas render</small>
+            </button>
+            <button class="workload-btn" data-workload="webgl">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>WebGL Shader Demo</span>
+              <small style="color:var(--text-dim)">GPU/CPU mathematical animation</small>
+            </button>
+            <button class="workload-btn" data-workload="dom_churn">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>Heavy DOM Churn</span>
+              <small style="color:var(--text-dim)">Dynamic single-page app mutations</small>
+            </button>
+            <button class="workload-btn" data-workload="idle">
+              <span class="btn-badge badge-benign">BENIGN</span>
+              <span>Normal Idle Browsing</span>
+              <small style="color:var(--text-dim)">Baseline user reading session</small>
+            </button>
+          </div>
+
+          <!-- Dynamic Sliders -->
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Compute Duty-Cycle Intensity:</span>
+              <span class="slider-val" id="intensityVal">50%</span>
+            </div>
+            <input type="range" id="intensitySlider" min="10" max="100" value="50" step="5">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Concurrent Web Workers:</span>
+              <span class="slider-val" id="workerVal">2</span>
+            </div>
+            <input type="range" id="workerSlider" min="1" max="4" value="2" step="1">
+          </div>
+
+          <div class="slider-group">
+            <div class="slider-header">
+              <span>Simulated Mining Pool POST Rate:</span>
+              <span class="slider-val" id="postVal">4 req/s</span>
+            </div>
+            <input type="range" id="postSlider" min="0" max="15" value="4" step="1">
+          </div>
+
+          <!-- Canvas Preview for Benign Workloads -->
+          <div class="workload-canvas-wrapper" id="canvasWrapper">
+            <canvas id="benignCanvas" width="480" height="80"></canvas>
+          </div>
+
+          <!-- Action Buttons -->
+          <div class="action-row">
+            <button class="btn-start" id="btnStart">
+              <span>▶</span> Start Simulated Workload
+            </button>
+            <button class="btn-stop" id="btnStop" style="display: none;">
+              <span>⏹</span> Stop Workload
+            </button>
+          </div>
+          <p class="safety-note">⚠️ Safety Protected: Runs locally in this tab only, mines zero cryptocurrency, and automatically cuts off after 30 seconds.</p>
+        </div>
+
+        <!-- Live Detection HUD -->
+        <div class="card">
+          <div class="card-title-row">
+            <h2 class="card-title">🛡️ Live Real-Time Verdict HUD</h2>
+            <span class="latency-badge" id="hudLatency">⚡ &lt; 0.4 ms</span>
+          </div>
+
+          <div class="hud-verdict">
+            <!-- Verdict Hero -->
+            <div class="verdict-hero safe" id="verdictHero">
+              <div class="hero-left">
+                <div class="hero-icon" id="heroIcon">🛡️</div>
+                <div>
+                  <div class="hero-title" id="heroTitle">NORMAL BENIGN BROWSING</div>
+                  <div class="hero-sub" id="heroSub">No cryptojacking signatures detected</div>
+                </div>
+              </div>
+              <div class="hero-right">
+                <div class="hero-prob" id="heroProb">0.0%</div>
+                <div class="hero-prob-label">Risk Probability</div>
+              </div>
+            </div>
+
+            <!-- Spark Metrics Grid -->
+            <div class="spark-grid">
+              <div class="spark-card">
+                <div class="spark-label">Event-Loop Lag</div>
+                <div class="spark-val" id="hudLag">0 ms</div>
+              </div>
+              <div class="spark-card">
+                <div class="spark-label">DOM Mutations</div>
+                <div class="spark-val" id="hudDom">0</div>
+              </div>
+              <div class="spark-card">
+                <div class="spark-label">POST / Requests</div>
+                <div class="spark-val" id="hudPost">0 / 0</div>
+              </div>
+            </div>
+
+            <!-- SHAP Explainability Breakdown -->
+            <div>
+              <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin-bottom:6px; text-transform:uppercase;">Top SHAP Behavioral Factors</div>
+              <div class="reasons-list" id="hudReasons">
+                <div class="reason-card none">
+                  <div class="reason-title"><span>🟢</span><span>Normal Resource Baseline</span></div>
+                  <div class="reason-desc">CPU event-loop and network telemetry fall squarely within expected normal browsing distributions.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- TAB 2: Research Benchmarks -->
+    <div id="tabBenchmarks" class="tab-pane">
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">📊 Honest Protocol vs Original Baseline (BE Project Reproduction)</h2>
+          <span class="badge badge-privacy">Locked Test Set (928 Real Normals)</span>
+        </div>
+        <p style="color:var(--text-muted); margin-bottom:14px;">
+          Comparison between the original BE Project recipe and the locked <strong>BrowserShield-Pro</strong> pipeline evaluated on held-out user groups under honest group-split cross validation.
+        </p>
+
+        <div class="table-wrapper">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>Evaluation Metric</th>
+                <th>Original Recipe (BE Project)</th>
+                <th>BrowserShield-Pro (Frozen Final)</th>
+                <th>Advantage / Note</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>False Positive Rate (Dangerous)</strong></td>
+                <td>13.0% (121 / 928)</td>
+                <td><strong>2.3% (21 / 928)</strong></td>
+                <td><span class="badge-tag badge-better">-82% False Alarms</span></td>
+              </tr>
+              <tr>
+                <td><strong>PR-AUC (8.35% Natural Prevalence)</strong></td>
+                <td>0.724</td>
+                <td><strong>0.817 [0.801, 0.835]</strong></td>
+                <td><span class="badge-tag badge-better">+12.8% Precision</span></td>
+              </tr>
+              <tr>
+                <td><strong>ROC-AUC</strong></td>
+                <td>0.955</td>
+                <td><strong>0.972 [0.968, 0.975]</strong></td>
+                <td><span class="badge-tag badge-better">+1.7% Separation</span></td>
+              </tr>
+              <tr>
+                <td><strong>Total Attack Recall (Dangerous + Suspicious)</strong></td>
+                <td>95.7%</td>
+                <td><strong>97.0% (225 / 232)</strong></td>
+                <td><span class="badge-tag badge-better">+1.3% Coverage</span></td>
+              </tr>
+              <tr>
+                <td><strong>Calibration Error (ECE)</strong></td>
+                <td>Uncalibrated (0.182)</td>
+                <td><strong>0.033 (Platt Calibrated)</strong></td>
+                <td><span class="badge-tag badge-better">5.5x Better Calibration</span></td>
+              </tr>
+              <tr>
+                <td><strong>Inference Latency (In-Browser)</strong></td>
+                <td>Python backend required (> 200 ms)</td>
+                <td><strong>&lt; 0.5 ms (Local JS / WASM)</strong></td>
+                <td><span class="badge-tag badge-better">Zero Network Overhead</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 3: Feature Engineering -->
+    <div id="tabFeatures" class="tab-pane">
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">🔬 BSP_v1 Telemetry Features & Bounding Envelope</h2>
+          <span class="card-subtitle">15 Engineered Feature Channels</span>
+        </div>
+        <div class="table-wrapper">
+          <table class="results-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Feature Name</th>
+                <th>Formula / Definition</th>
+                <th>Physical Interpretation</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>f0</td><td><code>counts_only</code></td><td><code>1.0 if uptime == 0 else 0.0</code></td><td>Explicit regime indicator for un-timed snapshots</td></tr>
+              <tr><td>f1</td><td><code>log_uptime_s</code></td><td><code>log(1 + uptime_ms / 1000)</code></td><td>Logarithmic page execution lifespan</td></tr>
+              <tr><td>f2</td><td><code>lag_fraction</code></td><td><code>clip(lag_ms / uptime_ms, 0, 1)</code></td><td>Fraction of total runtime spent blocking main thread</td></tr>
+              <tr><td>f3</td><td><code>log_dom_rate</code></td><td><code>log(1 + dom_count / uptime_s)</code></td><td>DOM mutation frequency per second</td></tr>
+              <tr><td>f4</td><td><code>log_net_rate</code></td><td><code>log(1 + net_count / uptime_s)</code></td><td>Total HTTP/resource network request frequency</td></tr>
+              <tr><td>f5</td><td><code>log_post_rate</code></td><td><code>log(1 + post_count / uptime_s)</code></td><td>Outgoing POST payload frequency (miner share submissions)</td></tr>
+              <tr><td>f6</td><td><code>post_share</code></td><td><code>clip(post_count / net_count, 0, 5)</code></td><td>Ratio of POST upload requests to all network traffic</td></tr>
+              <tr><td>f7</td><td><code>log_dom</code></td><td><code>log(1 + dom_count)</code></td><td>Total accumulated DOM elements modified</td></tr>
+              <tr><td>f8</td><td><code>log_net</code></td><td><code>log(1 + net_count)</code></td><td>Total network resources downloaded</td></tr>
+              <tr><td>f9</td><td><code>log_post</code></td><td><code>log(1 + post_count)</code></td><td>Total POST requests transmitted</td></tr>
+              <tr><td>f10</td><td><code>log_lag_ms</code></td><td><code>log(1 + lag_ms)</code></td><td>Total cumulative event-loop delay in milliseconds</td></tr>
+              <tr><td>f11</td><td><code>log_unique</code></td><td><code>log(1 + unique_domains)</code></td><td>Distinct hostname endpoints contacted</td></tr>
+              <tr><td>f12</td><td><code>idle_ratio</code></td><td><code>idle_sec / uptime_sec</code></td><td>Fraction of duration without mouse/keyboard interaction</td></tr>
+              <tr><td>f13</td><td><code>visibility_hidden</code></td><td><code>1.0 if hidden else 0.0</code></td><td>Tab running in background vs foreground</td></tr>
+              <tr><td>f14</td><td><code>log_vis_changes</code></td><td><code>log(1 + visibility_changes)</code></td><td>Tab switching frequency</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 4: Extension Setup -->
+    <div id="tabExtension" class="tab-pane">
+      <div class="card">
+        <div class="card-title-row">
+          <h2 class="card-title">🛡️ Install Chrome Extension in 60 Seconds</h2>
+          <span class="badge badge-privacy">Manifest V3 Ready</span>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">1</div>
+          <div class="step-body">
+            <div class="step-title">Open Chrome Extensions Manager</div>
+            <div class="step-desc">In Google Chrome, open a new tab and navigate to:</div>
+            <div class="code-box">chrome://extensions</div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">2</div>
+          <div class="step-body">
+            <div class="step-title">Enable Developer Mode</div>
+            <div class="step-desc">Toggle the <strong>"Developer mode"</strong> switch in the top right corner of the extensions page.</div>
+          </div>
+        </div>
+
+        <div class="install-step">
+          <div class="step-number">3</div>
+          <div class="step-body">
+            <div class="step-title">Load Unpacked Extension</div>
+            <div class="step-desc">Click <strong>"Load unpacked"</strong> and select the directory:</div>
+            <div class="code-box">BrowserShield-Pro/extension/</div>
+          </div>
+        </div>
+
+        <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 12px 16px; margin-top: 20px;">
+          <strong style="color: #34d399;">✓ Ready to Protect!</strong>
+          <p style="color: var(--text-muted); font-size: 12px; margin-top: 4px;">
+            The BrowserShield-Pro icon will appear in your Chrome toolbar. Click it on any webpage to inspect real-time telemetry, detect background cryptomining, and view AI risk attribution.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="inference.js"></script>
+  <script src="demo.js"></script>
+</body>
+</html>

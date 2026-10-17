@@ -1,0 +1,8 @@
+{
+  "note": "Locked before any model was trained. Salt-independent: row counts and a hash of the test feature vectors. tests/test_data.py fails if the test set changes.",
+  "locked_on": "2026-10-04",
+  "test_rows": 928,
+  "test_fingerprint": "aef6cae8bd4179c5",
+  "dev_rows": {"A": 8327, "B": 1725},
+  "normal_unique_rows": {"A": 9255, "B": 2653}
+}

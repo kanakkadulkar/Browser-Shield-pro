@@ -1,0 +1,12 @@
+,,roc_auc,roc_auc,roc_auc,pr_auc,pr_auc,pr_auc,trees_used,trees_used,trees_used
+,,mean,min,max,mean,min,max,mean,min,max
+fit,early_stopping,,,,,,,,,
+default_class_weight,False,1.0,0.999,1.0,0.999,0.996,1.0,300.0,300.0,300.0
+default_class_weight,True,0.996,0.987,1.0,0.982,0.919,1.0,7.444,1.0,15.0
+default_focal,False,1.0,1.0,1.0,0.999,0.996,1.0,300.0,300.0,300.0
+default_focal,True,0.993,0.984,1.0,0.987,0.97,1.0,11.333,1.0,27.0
+stage_d_stored:lr_bsp,,0.994,0.986,0.999,0.984,0.969,0.994,,,
+stage_d_stored:m1_bsp,,0.996,0.98,1.0,0.989,0.947,1.0,,,
+stage_d_stored:m2_bsp,,0.999,0.997,1.0,0.998,0.996,1.0,,,
+tuned_as_in_stage_d,False,1.0,1.0,1.0,1.0,0.998,1.0,254.556,105.0,441.0
+tuned_as_in_stage_d,True,0.996,0.98,1.0,0.989,0.947,1.0,3.333,1.0,10.0

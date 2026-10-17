@@ -1,0 +1,198 @@
+# FROZEN final pipeline. See tests/test_stage_e_freeze.py.
+status: FROZEN. Written after Stage E dev results and BEFORE the locked test set was touched. Do not edit.
+frozen_on: '2026-10-04'
+evidence:
+  stage_e_rules: configs/stage_e.yaml
+  stage_e_rules_sha256: 166421ac656cac14c56c3ebed3da261cc1be0ed8b984b3f5b8e5d5936128829d
+  stage_d_config_sha256: 46a720d72c62b25c2043f3a913a46a4a7526e2b5d93d6527759623ef2de8f9d8
+  dev_results: reports/stage_e/results.json
+  dev_results_sha256: e2d69fa4e33affdc8ec63dcbf02ee1716cb2b0d27a83ac99add4df2a3a447bb0
+  selection:
+    calibration: platt
+    regime_variant_per_base:
+      m1:
+        variant: V0
+        why: no eligible variant beats V0 by the required margin
+      m2:
+        variant: V0
+        why: no eligible variant beats V0 by the required margin
+      ens:
+        variant: V0
+        why: no eligible variant beats V0 by the required margin
+    final_base: m1
+    final_variant: V0
+    danger_validation_fpr_level: 0.0025
+data:
+  primary_reading: A
+  also_report:
+  - B
+  test_fingerprint: aef6cae8bd4179c5
+  test_groups: the two locked user groups (rank 2 and 4 by size in Reading A); same 928 real normals under both
+    readings
+  dedupe_before_split: true
+generator:
+  version: 2
+  config: configs/synth_v2.yaml
+  heldout_family: throttled
+  train_families:
+  - main_thread
+  - worker_pool
+  - network_only
+  train_attack_ratio: 0.0911
+  label: SIMULATED MINER SIGNAL, assumed effect sizes
+features:
+  name: bsp_v1
+  module: src/features2.py
+pipeline:
+  final_model: m1
+  members:
+  - m1
+  m1:
+    library: xgboost
+    tuning:
+      trials: 20
+      space:
+        n_estimators:
+        - 50
+        - 600
+        max_depth:
+        - 2
+        - 8
+        learning_rate:
+        - 0.02
+        - 0.3
+        subsample:
+        - 0.5
+        - 1.0
+        colsample_bytree:
+        - 0.5
+        - 1.0
+        min_child_weight:
+        - 1
+        - 20
+        reg_lambda:
+        - 0.01
+        - 20.0
+        imbalance:
+        - class_weight
+        - focal
+        focal_gamma:
+        - 0.5
+        - 3.0
+        focal_alpha:
+        - 0.5
+        - 0.95
+      objective: mean_pr_auc_on_two_validation_splits
+    early_stopping_rounds: 40
+  m2:
+    tuning:
+      trials: 20
+      space:
+        d_token:
+        - 16
+        - 32
+        - 64
+        n_layers:
+        - 1
+        - 2
+        - 3
+        n_heads:
+        - 2
+        - 4
+        ffn:
+        - 32
+        - 64
+        - 128
+        dropout:
+        - 0.0
+        - 0.3
+        lr:
+        - 0.0001
+        - 0.003
+        weight_decay:
+        - 1.0e-06
+        - 0.01
+        batch_size:
+        - 64
+        - 128
+        - 256
+        epochs:
+        - 10
+        - 60
+        imbalance:
+        - class_weight
+        - focal
+        focal_gamma:
+        - 0.5
+        - 3.0
+        focal_alpha:
+        - 0.5
+        - 0.95
+      objective: mean_pr_auc_on_two_validation_splits
+    final_fit:
+      max_epochs: 80
+      warmup_epochs: 3
+      es_patience: 12
+  calibration:
+    method: platt
+    fit_on: validation only
+  ensemble: null
+  regime_handling:
+    variant: V0
+    counts_only_model:
+      type: logistic_regression
+      features:
+      - log_net
+      - log_post
+      - post_share
+      - log_unique
+      - visibility_hidden
+      - log_vis_changes
+      min_train_normals: 20
+      min_train_attacks: 5
+    regime_threshold_min_val_normals: 10
+    calibrator_min_val_attacks: 5
+  threshold_policy:
+    danger_validation_fpr: 0.0025
+    suspicious_validation_fpr: 0.05
+    thresholds_fit_on: validation normals of the training side only
+    unsure:
+      rule: any bsp_v1 feature outside [min - delta*range, max + delta*range] of the TRAINING data (normals + attacks)
+      delta: 0.1
+training:
+  seeds:
+  - 42
+  - 43
+  - 44
+  train_on: all DEV groups (no held-out dev group)
+  inner_validation: smallest remaining dev group with >= 50 rows if at least two such groups remain, else a random
+    20%
+  hyperparameters: re-tuned with the frozen procedure on the final training side, per seed
+  his_recipe_comparator: trained on the same training side and attacks (R2, held-out family excluded), evaluated
+    on the same test sets
+final_evaluation_plan:
+  run_only_after: explicit approval from the project owner
+  test_sets:
+    seen_families: test-group real normals + attacks from generator v2 (3 seen families)
+    heldout_family: test-group real normals + attacks from the held-out family only
+  attack_counts:
+    at_prevalence_0.0835:
+      group_rank2_user: 59
+      group_rank4_user: 26
+    evaluation_ratio_0.25:
+      group_rank2_user: 161
+      group_rank4_user: 71
+    note: evaluation sets use ratio 0.25 for stable estimates; precision, F1, FPR and PR-AUC are reweighted to 8.35%
+      prevalence, exactly as in dev
+  metrics:
+  - ROC-AUC
+  - PR-AUC (prevalence 8.35%)
+  - recall at oracle FPR 1% and 0.1%
+  - realised FPR and recall at the frozen policy per test group
+  - verdict breakdown dangerous/suspicious/unsure/safe
+  - FPR on counts-only normals and on other normals
+  - ECE and reliability curve
+  - per-group results (2 groups) and bootstrap CIs
+  - his recipe as comparator
+  - sweep onset
+  single_evaluation: true

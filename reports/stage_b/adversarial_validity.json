@@ -1,0 +1,454 @@
+{
+  "seed": 42,
+  "test_groups_locked": [
+    "a960bedbdc",
+    "b937c3a097"
+  ],
+  "readings": {
+    "A": {
+      "dev_normals": 8327,
+      "validation_folds": [
+        "0f14de3bc3",
+        "2c0470d685",
+        "unknown_source"
+      ],
+      "friend": {
+        "n_normal": 8327,
+        "n_attack": 800,
+        "folds_used": 3,
+        "auc_all": 1.0,
+        "auc_signal_only": 1.0,
+        "auc_non_signal_only": 0.9974441240086518,
+        "fold_auc_all": [
+          1.0,
+          1.0,
+          1.0
+        ],
+        "single_feature": {
+          "idle_ratio": {
+            "oof_tree_auc": 0.7963155641672675,
+            "rank_auc": 0.5775186253304494
+          },
+          "lag_per_second": {
+            "oof_tree_auc": 0.920521283946167,
+            "rank_auc": 0.9184446347031964
+          },
+          "dom_per_second": {
+            "oof_tree_auc": 0.9075273371785629,
+            "rank_auc": 0.8986118120644075
+          },
+          "network_per_second": {
+            "oof_tree_auc": 0.9936276586157173,
+            "rank_auc": 0.9881611992309541
+          },
+          "event_loop_lag_ms": {
+            "oof_tree_auc": 0.9819153298485941,
+            "rank_auc": 0.8297509613073781
+          },
+          "dom_mutation_count": {
+            "oof_tree_auc": 0.9490172134102379,
+            "rank_auc": 0.7863418499158856
+          },
+          "network_request_count": {
+            "oof_tree_auc": 0.9043544220139389,
+            "rank_auc": 0.8598899753664985
+          },
+          "post_request_count": {
+            "oof_tree_auc": 0.9134596551309779,
+            "rank_auc": 0.822314497716895
+          },
+          "unique_domains_contacted": {
+            "oof_tree_auc": 0.9198011295361692,
+            "rank_auc": 0.8152030010814708
+          },
+          "visibility_hidden": {
+            "oof_tree_auc": 0.6428859498918529,
+            "rank_auc": 0.653521539293439
+          },
+          "visibility_changes": {
+            "oof_tree_auc": 0.8292030912040375,
+            "rank_auc": 0.5098141973083394
+          }
+        },
+        "perm_importance_auc_drop": {
+          "network_per_second": 0.2172,
+          "event_loop_lag_ms": 0.0192,
+          "post_request_count": 0.0,
+          "dom_mutation_count": 0.0,
+          "lag_per_second": 0.0,
+          "idle_ratio": 0.0,
+          "dom_per_second": 0.0,
+          "network_request_count": 0.0,
+          "unique_domains_contacted": 0.0,
+          "visibility_hidden": 0.0,
+          "visibility_changes": 0.0
+        }
+      },
+      "rebuilt": {
+        "n_normal": 8327,
+        "n_attack": 2081,
+        "folds_used": 3,
+        "auc_all": 0.9764520112562118,
+        "auc_signal_only": 0.9743506815593089,
+        "auc_non_signal_only": 0.5453639150109117,
+        "fold_auc_all": [
+          0.965,
+          0.992,
+          0.9784
+        ],
+        "single_feature": {
+          "idle_ratio": {
+            "oof_tree_auc": 0.5272104901685996,
+            "rank_auc": 0.540638507197275
+          },
+          "lag_per_second": {
+            "oof_tree_auc": 0.7211582090903601,
+            "rank_auc": 0.70627977162829
+          },
+          "dom_per_second": {
+            "oof_tree_auc": 0.5285134058148009,
+            "rank_auc": 0.5472887528769064
+          },
+          "network_per_second": {
+            "oof_tree_auc": 0.8317946525487061,
+            "rank_auc": 0.7835419938535919
+          },
+          "event_loop_lag_ms": {
+            "oof_tree_auc": 0.8142703100724434,
+            "rank_auc": 0.7100057904795692
+          },
+          "dom_mutation_count": {
+            "oof_tree_auc": 0.5434336492921098,
+            "rank_auc": 0.5243048277517106
+          },
+          "network_request_count": {
+            "oof_tree_auc": 0.8068217658283406,
+            "rank_auc": 0.811130152865658
+          },
+          "post_request_count": {
+            "oof_tree_auc": 0.846053795102714,
+            "rank_auc": 0.8441936006539293
+          },
+          "unique_domains_contacted": {
+            "oof_tree_auc": 0.7421516424278394,
+            "rank_auc": 0.7031267954499811
+          },
+          "visibility_hidden": {
+            "oof_tree_auc": 0.5119705230636973,
+            "rank_auc": 0.5142600664438476
+          },
+          "visibility_changes": {
+            "oof_tree_auc": 0.5036160470888172,
+            "rank_auc": 0.502770947729662
+          }
+        },
+        "perm_importance_auc_drop": {
+          "event_loop_lag_ms": 0.0961,
+          "network_per_second": 0.0954,
+          "post_request_count": 0.0855,
+          "unique_domains_contacted": 0.0105,
+          "lag_per_second": 0.0056,
+          "dom_per_second": 0.0048,
+          "visibility_hidden": 0.0035,
+          "network_request_count": 0.0015,
+          "idle_ratio": 0.0003,
+          "dom_mutation_count": 0.0001,
+          "visibility_changes": 0.0
+        },
+        "by_tier": {
+          "weak": {
+            "n_attack": 709,
+            "auc_all": 0.9580551694168667,
+            "auc_non_signal_only": 0.5555361780032126,
+            "max_single_feature_oof_auc": 0.8173204133079379,
+            "best_single_feature": "event_loop_lag_ms"
+          },
+          "medium": {
+            "n_attack": 697,
+            "auc_all": 0.9826030259115094,
+            "auc_non_signal_only": 0.5341596852925143,
+            "max_single_feature_oof_auc": 0.8544855436679394,
+            "best_single_feature": "network_per_second"
+          },
+          "strong": {
+            "n_attack": 675,
+            "auc_all": 0.9894240166626613,
+            "auc_non_signal_only": 0.5462486759771066,
+            "max_single_feature_oof_auc": 0.9114716903878164,
+            "best_single_feature": "post_request_count"
+          }
+        },
+        "by_family_auc_all": {
+          "main_thread": 0.9945168394220376,
+          "network_only": 0.9506655812468338,
+          "throttled": 0.9852253074000608,
+          "worker_pool": 0.9566385451999955
+        }
+      },
+      "structure": {
+        "real_normal": {
+          "rows": 8327,
+          "regime_share": {
+            "U": 0.9725,
+            "U0": 0.0267,
+            "zero": 0.0008
+          },
+          "rates_share_one_uptime": 1.0,
+          "rows_with_any_feature_above_real_max": 0.0,
+          "rows_with_any_feature_above_real_p99.9": 0.0085
+        },
+        "friend_synthetic": {
+          "rows": 800,
+          "regime_share": {
+            "U": 1.0
+          },
+          "rates_share_one_uptime": 0.0,
+          "rows_with_any_feature_above_real_max": 1.0,
+          "rows_with_any_feature_above_real_p99.9": 1.0
+        },
+        "rebuilt_synthetic": {
+          "rows": 2081,
+          "regime_share": {
+            "U": 0.8976,
+            "U0": 0.1024
+          },
+          "rates_share_one_uptime": 1.0,
+          "rows_with_any_feature_above_real_max": 0.0706,
+          "rows_with_any_feature_above_real_p99.9": 0.1341
+        }
+      },
+      "rebuilt_family_counts": {
+        "main_thread": 661,
+        "throttled": 611,
+        "worker_pool": 596,
+        "network_only": 213
+      },
+      "rebuilt_tier_counts": {
+        "weak": 709,
+        "medium": 697,
+        "strong": 675
+      }
+    },
+    "B": {
+      "dev_normals": 1725,
+      "validation_folds": [
+        "0f14de3bc3",
+        "2c0470d685"
+      ],
+      "friend": {
+        "n_normal": 1725,
+        "n_attack": 800,
+        "folds_used": 2,
+        "auc_all": 1.0,
+        "auc_signal_only": 1.0,
+        "auc_non_signal_only": 0.9033643695014661,
+        "fold_auc_all": [
+          1.0,
+          1.0
+        ],
+        "single_feature": {
+          "idle_ratio": {
+            "oof_tree_auc": 0.7045491202346041,
+            "rank_auc": 0.6661730205278592
+          },
+          "lag_per_second": {
+            "oof_tree_auc": 0.8898907624633431,
+            "rank_auc": 0.912783724340176
+          },
+          "dom_per_second": {
+            "oof_tree_auc": 0.8161667888563049,
+            "rank_auc": 0.8808313782991203
+          },
+          "network_per_second": {
+            "oof_tree_auc": 0.9827921554252199,
+            "rank_auc": 0.9713475073313782
+          },
+          "event_loop_lag_ms": {
+            "oof_tree_auc": 0.9905263929618768,
+            "rank_auc": 0.8405740469208212
+          },
+          "dom_mutation_count": {
+            "oof_tree_auc": 0.7791140029325514,
+            "rank_auc": 0.7754024926686217
+          },
+          "network_request_count": {
+            "oof_tree_auc": 0.856651026392962,
+            "rank_auc": 0.8556847507331378
+          },
+          "post_request_count": {
+            "oof_tree_auc": 0.8717463343108505,
+            "rank_auc": 0.8056044721407625
+          },
+          "unique_domains_contacted": {
+            "oof_tree_auc": 0.8826546920821114,
+            "rank_auc": 0.7938815982404692
+          },
+          "visibility_hidden": {
+            "oof_tree_auc": 0.6332122434017595,
+            "rank_auc": 0.6650018328445748
+          },
+          "visibility_changes": {
+            "oof_tree_auc": 0.7657928885630498,
+            "rank_auc": 0.516600439882698
+          }
+        },
+        "perm_importance_auc_drop": {
+          "network_per_second": 0.3448,
+          "event_loop_lag_ms": 0.0286,
+          "idle_ratio": 0.0004,
+          "dom_per_second": 0.0001,
+          "lag_per_second": 0.0,
+          "dom_mutation_count": 0.0,
+          "network_request_count": 0.0,
+          "post_request_count": 0.0,
+          "unique_domains_contacted": 0.0,
+          "visibility_hidden": 0.0,
+          "visibility_changes": 0.0
+        }
+      },
+      "rebuilt": {
+        "n_normal": 1725,
+        "n_attack": 427,
+        "folds_used": 2,
+        "auc_all": 0.9353939027656638,
+        "auc_signal_only": 0.9279471453982295,
+        "auc_non_signal_only": 0.4788883776192079,
+        "fold_auc_all": [
+          0.9205,
+          0.9925
+        ],
+        "single_feature": {
+          "idle_ratio": {
+            "oof_tree_auc": 0.47729779474887885,
+            "rank_auc": 0.5038851154134072
+          },
+          "lag_per_second": {
+            "oof_tree_auc": 0.6583055759681883,
+            "rank_auc": 0.7066761900183368
+          },
+          "dom_per_second": {
+            "oof_tree_auc": 0.456346878927524,
+            "rank_auc": 0.5351603975083615
+          },
+          "network_per_second": {
+            "oof_tree_auc": 0.8058733440013186,
+            "rank_auc": 0.7390310905382296
+          },
+          "event_loop_lag_ms": {
+            "oof_tree_auc": 0.7932345285597534,
+            "rank_auc": 0.7184517227880528
+          },
+          "dom_mutation_count": {
+            "oof_tree_auc": 0.496543435411759,
+            "rank_auc": 0.5066748164579999
+          },
+          "network_request_count": {
+            "oof_tree_auc": 0.7720590356232874,
+            "rank_auc": 0.8057510971313193
+          },
+          "post_request_count": {
+            "oof_tree_auc": 0.8000934021029209,
+            "rank_auc": 0.8325623081307905
+          },
+          "unique_domains_contacted": {
+            "oof_tree_auc": 0.7075126882636137,
+            "rank_auc": 0.6792894572376329
+          },
+          "visibility_hidden": {
+            "oof_tree_auc": 0.49648849299827624,
+            "rank_auc": 0.503563015514364
+          },
+          "visibility_changes": {
+            "oof_tree_auc": 0.5175273166812036,
+            "rank_auc": 0.522977604098704
+          }
+        },
+        "perm_importance_auc_drop": {
+          "event_loop_lag_ms": 0.1163,
+          "post_request_count": 0.0663,
+          "network_per_second": 0.0368,
+          "network_request_count": 0.0159,
+          "dom_per_second": 0.0053,
+          "unique_domains_contacted": 0.0043,
+          "lag_per_second": 0.0029,
+          "idle_ratio": 0.0014,
+          "visibility_hidden": 0.0005,
+          "visibility_changes": -0.0001,
+          "dom_mutation_count": -0.0005
+        },
+        "by_tier": {
+          "weak": {
+            "n_attack": 138,
+            "auc_all": 0.8875217816311785,
+            "auc_non_signal_only": 0.4781524926686217,
+            "max_single_feature_oof_auc": 0.7794466403162055,
+            "best_single_feature": "event_loop_lag_ms"
+          },
+          "medium": {
+            "n_attack": 149,
+            "auc_all": 0.9415202031136216,
+            "auc_non_signal_only": 0.48579188726406736,
+            "max_single_feature_oof_auc": 0.8158692357653172,
+            "best_single_feature": "network_per_second"
+          },
+          "strong": {
+            "n_attack": 140,
+            "auc_all": 0.9760620025136154,
+            "auc_non_signal_only": 0.47226644323418515,
+            "max_single_feature_oof_auc": 0.8749916212819439,
+            "best_single_feature": "post_request_count"
+          }
+        },
+        "by_family_auc_all": {
+          "main_thread": 0.9728660652324774,
+          "network_only": 0.8409606087025442,
+          "throttled": 0.9291659824046921,
+          "worker_pool": 0.9306451612903226
+        }
+      },
+      "structure": {
+        "real_normal": {
+          "rows": 1725,
+          "regime_share": {
+            "U": 0.9281,
+            "U0": 0.0707,
+            "zero": 0.0012
+          },
+          "rates_share_one_uptime": 1.0,
+          "rows_with_any_feature_above_real_max": 0.0,
+          "rows_with_any_feature_above_real_p99.9": 0.011
+        },
+        "friend_synthetic": {
+          "rows": 800,
+          "regime_share": {
+            "U": 1.0
+          },
+          "rates_share_one_uptime": 0.0,
+          "rows_with_any_feature_above_real_max": 1.0,
+          "rows_with_any_feature_above_real_p99.9": 1.0
+        },
+        "rebuilt_synthetic": {
+          "rows": 427,
+          "regime_share": {
+            "U": 0.9133,
+            "U0": 0.0867
+          },
+          "rates_share_one_uptime": 1.0,
+          "rows_with_any_feature_above_real_max": 0.1288,
+          "rows_with_any_feature_above_real_p99.9": 0.1686
+        }
+      },
+      "rebuilt_family_counts": {
+        "worker_pool": 134,
+        "main_thread": 131,
+        "throttled": 125,
+        "network_only": 37
+      },
+      "rebuilt_tier_counts": {
+        "medium": 149,
+        "strong": 140,
+        "weak": 138
+      }
+    }
+  }
+}

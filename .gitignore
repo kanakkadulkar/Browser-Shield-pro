@@ -1,0 +1,31 @@
+# Python and environments
+.venv/
+env/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Secrets and local credentials
+.secrets/
+
+# Operating System and IDE files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+.vscode/
+.idea/
+
+# Data and large binary artifacts (respects privacy/licensing guidelines)
+data/
+*.pkl
+reports/**/raw/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
